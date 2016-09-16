@@ -122,4 +122,66 @@ This algorithm may not able to get our work here done. This algorithm might miss
 2. For one single structure, this algorithm cannot yield the optimal solution.
    We discuss how to tackle these 2 problems in the following section
 
+## Investigation of brute force solution
+We now would like to go other way around. For each $n$ variable function. Using $n-1$ LUTs, we go through all structures it can form. For each structure, we iterate all possible combination of inputs. We thus find all possible truth table that can be represented using these $n-1$ LUTs. 
 
+Then for every node we wish to simplify, we compare the result with all the truth tables. Find the one with the minimum difference. This is the optimal approxiamate of the given function.
+
+*In practice we can precalculate the data.*
+
+For an $n$ input function:
+* In total $2^n$ possible input patterns
+* In total $2^{2^n}$ possible functions
+
+### Counting number structures
+
+In order to count the number of all possible structures:
+* Observe that each possible structure can be uniquely represented by a binary tree.
+* We require that each literal appears only once
+* We require literals appears only on leaves
+* **The output of an LUT must be connected to the input of one LUT, and 1 only**
+* **The input of an LUT must be connected either to another LUT output, or to a literal**
+
+Due to the last 2 requirements, we claim that our binary tree is a full binary tree. We denote each binary tree is a "Structure". 
+
+We must make one further requirement:
+* We require when we traverse the tree using prefix order, the literal must appear in the order of $(x_1, x_2, x_3, ... , x_n)$. This further implies we consider the left child and right child of a single tree different.
+
+So we are essentially counting the number of full binary trees. Referencing VE203 course material (P674, Dr. Hohberger), we find the number of full binary trees,  are:
+$$
+C_{n} = \dfrac{1}{n}\left(\begin{matrix}2(n-1)\\ n-1\end{matrix}\right)
+$$
+This number is simply the Catlan number.
+
+Example: for $n=3$, we have the following 2 possibilities:
+
+![fig2](week2\fig2.png)
+
+* Some comments:
+  We see there exists some "redundancies". Some structures are symmetric to another (1-5, 2-4). Some are effectively the same if we switch the order of literals (1-2).  **I believe what only matters is the number of input.** e.g. for this 4 input example, the only 2 partitioning is ((A,B), (C,D)) or (((A,(B,C)), D). Others all can be derived from these basics. Maybe take a look at this "NPN Equivalance" article may help? *This idea would need further discussion*
+
+### Counting number of cases to be considered.
+Note that:
+* There are 16 kinds of 2 input LUT
+* If the circuit need $n-1$ LUT, then there are $16^{n-1}$ possible functions. 
+  - Note many of them are overlaping
+* Each possible function would generate a truth table with $2^n$ terms.
+* Thus in total the computational expense is
+$$
+E=C_n * 16^{n-1} * 2^n = \dfrac{2^{5n-4}}{n}\left(\begin{matrix}2(n-1)\\ n-1\end{matrix}\right)
+$$
+With spatial complexity less then $2^{2^2}$
+
+The following table gives common values:
+
+| $n$  |     Time     |    Sapce     |
+| :--: | :----------: | :----------: |
+|  3   |     4096     |     256      |
+|  4   |    327608    |    65536     |
+|  5   |   29360128   |  4294967296  |
+|  6   |  2818572288  | Uncomputable |
+|  7   | 283467841536 | Uncomputable |
+
+Note when $n=5$, both numbers are around $2^32$. This is perhaps the laregest testing set we can use. It is possible to run an algorithm to verify this idea on 5 input functions.
+
+Note the spacial requirement is verly likely heavily overestimated.
