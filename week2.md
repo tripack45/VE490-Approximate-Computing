@@ -1,7 +1,3 @@
----
-typora-root-url: D:\VE490
----
-
 # VE490 Weekly Report 2
 
 [TOC]
@@ -44,7 +40,7 @@ Note that $n-1$ LUT is the minimum amout of gate that can be used to implement a
 
 We also note that this decomposition is not the only way to connect $n$ inputs using $n-1$   to form a function. For a boolean function with 5 inputs, we give the following examples:
 
-![fig1](week2/fig1.png)
+![fig1](week2\fig1.png)
 
 There are a bunch of thing that I am not sure of:
 * It's unclear whether these are the only 3 possible situations. I guess it is. But I need to prove this... I am also not sure if there exists a way of enumerating them one by one, or essentially counting them... I think it is related to the VE203 Catlan numbers stuff. 
@@ -153,7 +149,7 @@ C_{n} = \dfrac{1}{n}\left(\begin{matrix}2(n-1)\\ n-1\end{matrix}\right)
 $$
 This number is simply the Catlan number.
 
-Example: for $n=3$, we have the following 2 possibilities:
+Example: for $n=4$, we have the following 5 possibilities:
 
 ![fig2](week2\fig2.png)
 
