@@ -50,7 +50,8 @@ I think we can be fairly sure that limiting our self to this particular gate arr
 ### Searching
 It seems other then the obviouse brute force searching algorithm, Chen seems to have invented an accelarated version of the algorithm. This algorithm some how accelerated the entire process by 3x in some cases.
 #### Comments
-Didn't quite understand the alogorithm, too much jargons unexplained.
+Gets the basic idea. 
+
 ### "Approxiamate Core"
 Definition
 > This is the main process in the approximation approach to approximate a truth table into the one which is decomposible and returns an approximate cost [Chen]
@@ -111,7 +112,7 @@ Chen proposes this **MFFC**
 **THIS PART IS LEFT UNSOLVED**
 
 ### Main Theorems
-
+The theorem is based on the Theorem 1 of the paper.
 ### Conclusion 
 This algorithm may not able to get our work here done. This algorithm might miss major pieces, because of 2 things:
 1. This algorithm missed many structures.
@@ -178,6 +179,39 @@ The following table gives common values:
 |  6   |  2818572288  | Uncomputable |
 |  7   | 283467841536 | Uncomputable |
 
-Note when $n=5$, both numbers are around $2^32$. This is perhaps the laregest testing set we can use. It is possible to run an algorithm to verify this idea on 5 input functions.
+Note when $n=5$, both numbers are around $2^{32}$. This is perhaps the laregest testing set we can use. It is possible to run an algorithm to verify this idea on 5 input functions.
 
 Note the spacial requirement is verly likely heavily overestimated.
+
+### Proposed work
+From the previous disccussions it is clear that enumerating the complete space is not possible given reasonably amount of inputs. There are 2 different strategies. 
+1. Precalculate the data. This can be done up to 6 inputs. Then run a comparison for the most significant output.
+2. Adapt the original algorithm. Expand the search space to all the structures, while preserving the "greedy strategy". I expect this to give a boost towards outcome accuracy. However I'm not sure yet. Also due to the greedy nature of the strategy this shouldn't increase the time complexity by much.
+
+## A Possible expansion to the main theorem...
+
+It seems that the reason why a completely separable partition have everything to do with NPN equivalencies. If we try to make the following formalism:
+
+* Regard a pattern and its complementary patern belong to the same *pattern group*.
+* Divide *pattern groups* into 2 classes: Depends only on one variable, or both variables.
+
+Then there are 4 ways of picking at most 2 patterns from these pattern groups:
+1. Pick one pattern, does not depend on the other set of variable
+2. Pick one pattern, depen on the other variable set
+3. Pick 2 patterns, both from class 1
+4. Pick 2 patterns accross differet classes
+
+Notice there are 4 types of NPN un-equivalent classes:
+1. Constants
+2. Inverters / Buffers
+3. XORs
+4. Selectors (Only one of the entries is different from others)
+
+Then there is this correspondance between these two. 
+
+I think I will need to develop further into this idea.
+
+- [ ] Need to prove that for 2 separable function, this is actually correct.
+- [ ] May be devleop some sore of bottom up recursive structure?
+
+
