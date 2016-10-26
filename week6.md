@@ -85,7 +85,7 @@ We ommit the proof for now. I'd like to keep this weekly simple because there ar
 
 The $\otimes$ operator works very much like a "product", or essentially a "Cartesian Product". Together with the "Union" operator, these 2 will follow a "distribute rule", i.e. given a list of mutually exclusive set of full binary trees $X_1, X_2, ...$
 $$
-	\left(\cup_{i\in\{1,2,3...\}}X_i\right)\otimes T(Y) = \cup_{i\in\{1,2,3...\}}[X_i \otimes T(Y)]
+\left(\bigcup\limits_{i\in\{1,2,3...\}}X_i\right)\otimes T(Y) = \bigcup\limits_{i\in\{1,2,3...\}}[X_i \otimes T(Y)]
 $$
 This can be proved from definition.
 
@@ -93,6 +93,12 @@ This can be proved from definition.
 
 The process of searching contains branch eliminations and estimating. A lot of assumptions are related to the "error" of a decomposition. Thus it will be worth while to model the idea of "decomposition" and "error" more carefully. 
 
+### Decomposition
+*This section requires refinement*
+In principle there many more ways of breaking down a parent node search space. But we would want to limit the break-done only to those "Decomposable" ones. In particular, we would like to make statments like "All trees in the set of this node can be composite from this node". Thus we would like to associate with every node a boolean function. 
+
+
+### Error Estimation
 We first define what an error is, using the usual diffintion. Assuming function $f$ and $g$ are defined on the same set $X$, then the error of the function, denote as $E[f, g]$:
 $$
 E[f, g] = \text{card} \{x \in X  : f(x)\neq g(x)\}
@@ -101,3 +107,18 @@ Then natrually the error rate $ER[f, g]$:
 $$
 ER[f, g] = E[f, g] / \text{card} X
 $$
+In order to preform branch elimination, we must estimate the worst case scenario. We make our first attempt to define the **Global Minimum Error** of a node. Assume the function that we try to approximate is $F(X)$. Given a set of full binary trees $T$, the Global Minimum Error of this set $T$, is
+$$
+\mathrm{GMin}(T):=\min\limits_{t\in T}\{E[\tilde{t}, F]\}
+$$
+Essentially branch elimination, including branch and bound, relies on the estimation of the lower bound of the Global Minimum Error. It is clear that
+$$
+T_c\subset T_p \implies \mathrm{GMin}(T) \geq \mathrm{GMin}(T_p)
+$$
+This also translates to the fact that the global minimum of a child node is always larger then the global minimum of a parent node. Notice that the Global Minimum Error of leaf node, which contains one tree only, is by definition the error that particular decomposition. Thus we can naturally use the global minimum of a higher level node to estimate the lower bound of the final decomposited error.
+
+This is a prelimenary result. Clearly there exists other type of errors. We will study how they are related and how to estimate them in the future.
+
+#### Footnote
+We have a small problem here. We assume that given a Tree stucture, this is one and one only equation that corresponds to the structure. This is clearly not true. But we can argue, if we choose the decompositing function uniquely in each stage. Given a struture, its corresponds to a unique equation. There is also no guarantee that this equation is indeed the best of all the options in this tree structure. We simply assumes that the way we decomposites gives this property.
+
